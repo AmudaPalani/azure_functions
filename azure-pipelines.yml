@@ -20,24 +20,6 @@ steps:
     command: 'init'
     backendServiceArm: 'azure_dce_nonprod'
     backendAzureRmResourceGroupName: 'redboxFunctions'
-- task: TerraformCLI@0
-    displayName: 'terraform init'
-    inputs:
-    command: init
-    workingDirectory: '$(Build.SourcesDirectory)/infrastructure/terraform'
-
-- task: TerraformCLI@0
-    displayName: 'terraform validate'
-    inputs:
-    command: validate
-    workingDirectory: '$(Build.SourcesDirectory)/infrastructure/terraform'
-
-- task: TerraformCLI@0
-    displayName: 'terraform apply'
-    inputs:
-    command: apply
-    workingDirectory: '$(Build.SourcesDirectory)/infrastructure/terraform'
-    environmentServiceName: azure
 
 - task: ArchiveFiles@2
     displayName: 'Archive $(Build.SourcesDirectory)/functionApp'
