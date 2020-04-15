@@ -19,7 +19,10 @@ steps:
     provider: 'azurerm'
     command: 'init'
     backendServiceArm: 'azure_dce_nonprod'
-    backendAzureRmResourceGroupName: 'redboxFunctions'
+    backendAzureRmResourceGroupName: 'apalan11apalan11-01'
+    backendAzureRmStorageAccountName: 'dcetest'
+    backendAzureRmContainerName: 'dcetest'
+    backendAzureRmKey: $BACKEND_AZURE_RM_KEY
 
 - task: ArchiveFiles@2
   inputs:
