@@ -14,11 +14,6 @@ steps:
   condition: always()
   displayName: 'Install terraform'
 
-- task: TerraformInstaller@0
-    displayName: 'Install terraform2'
-    inputs:
-        terraformVersion: 0.12.18
-
 - task: TerraformCLI@0
     displayName: 'terraform init'
     inputs:
