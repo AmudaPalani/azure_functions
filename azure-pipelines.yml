@@ -14,7 +14,12 @@ steps:
   condition: always()
   displayName: 'Install terraform'
 
-
+- task: TerraformTaskV1@0
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'azure_dce_nonprod'
+    backendAzureRmResourceGroupName: 'redboxFunctions'
 - task: TerraformCLI@0
     displayName: 'terraform init'
     inputs:
