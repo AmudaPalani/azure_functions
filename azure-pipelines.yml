@@ -1,0 +1,51 @@
+trigger:
+- master
+pr:
+- master
+    
+pool:
+vmImage: "Ubuntu 16.04"
+
+steps:
+    
+- task: TerraformInstaller@0
+    displayName: 'Install terraform'
+    inputs:
+    terraformVersion: 0.12.18
+
+- task: TerraformCLI@0
+    displayName: 'terraform init'
+    inputs:
+    command: init
+    workingDirectory: '$(Build.SourcesDirectory)/infrastructure/terraform'
+
+- task: TerraformCLI@0
+    displayName: 'terraform validate'
+    inputs:
+    command: validate
+    workingDirectory: '$(Build.SourcesDirectory)/infrastructure/terraform'
+
+- task: TerraformCLI@0
+    displayName: 'terraform apply'
+    inputs:
+    command: apply
+    workingDirectory: '$(Build.SourcesDirectory)/infrastructure/terraform'
+    environmentServiceName: azure
+
+- task: ArchiveFiles@2
+    displayName: 'Archive $(Build.SourcesDirectory)/functionApp'
+    inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)/functionApp'
+    includeRootFolder: false
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+
+- task: AzureFunctionApp@1
+    displayName: 'Azure Function App Deploy: dce functions'
+    inputs:
+    azureSubscription: azure
+    appType: functionApp
+    appName: dce-functions
+    package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    deploymentMethod: runFromPackage
+    resourceGroupName: dce-rg-functions
+    
