@@ -28,14 +28,3 @@ steps:
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
-
-- task: AzureFunctionApp@1
-    displayName: 'Azure Function App Deploy: dce functions'
-    inputs:
-    azureSubscription: azure
-    appType: functionApp
-    appName: dce-functions
-    package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    deploymentMethod: runFromPackage
-    resourceGroupName: dce-rg-functions
-    
