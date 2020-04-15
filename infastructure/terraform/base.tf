@@ -1,7 +1,3 @@
-terraform {
-  # backend "azurerm" {}
-}
-
 
 resource "azurerm_resource_group" "dcerg" {
   name     = "dce-${var.environment}"
