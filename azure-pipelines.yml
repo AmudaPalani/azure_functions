@@ -22,11 +22,12 @@ steps:
     backendAzureRmResourceGroupName: 'redboxFunctions'
 
 - task: ArchiveFiles@2
-    displayName: 'Archive $(Build.SourcesDirectory)/functionApp'
-    inputs:
-        rootFolderOrFile: '$(Build.SourcesDirectory)/functionApp'
-        includeRootFolder: false
-        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)/functionApp'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
 
 - task: AzureFunctionApp@1
     displayName: 'Azure Function App Deploy: dce functions'
