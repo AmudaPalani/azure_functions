@@ -30,7 +30,7 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'validate'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform'
+    workingDirectory: './infrastructure/terraform'
     
 - task: TerraformTaskV1@0
   displayName: 'terraform apply'
