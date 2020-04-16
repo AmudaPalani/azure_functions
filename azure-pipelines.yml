@@ -32,6 +32,10 @@ steps:
     command: 'validate'
     workingDirectory: './infrastructure/terraform'
     environmentServiceNameAzureRM: 'azure_dce_nonprod'
+    backendAzureRmResourceGroupName: 'apalan11apalan11-01'
+    backendAzureRmStorageAccountName: 'dcetest'
+    backendAzureRmContainerName: 'dcetest'
+    backendAzureRmKey: $BACKEND_AZURE_RM_KEY
 
 - task: TerraformTaskV1@0
   displayName: 'terraform apply'
