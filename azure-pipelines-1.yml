@@ -7,7 +7,7 @@ pool:
 variables:
   LOCATION: eastus
   # Uncomment & change this to something more unique before running
-  PREFIX: Palani
+  PREFIX: palani0416
 
 jobs:
 - job: SetupAzureTFBackend
