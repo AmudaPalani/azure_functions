@@ -36,3 +36,73 @@ jobs:
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: 'az storage container create --name tfstate --account-name $(PREFIX)tfstor'
+
+- job: Deploy
+  displayName: Build and Deploy
+  dependsOn: 
+  - SetupAzureTFBackend
+  steps:
+  - task: UseDotNet@2
+    displayName: 'Target .NET Core 3.1'
+    inputs:
+      packageType: sdk
+      version: 3.1.x
+      
+  - task: TerraformInstaller@0
+    displayName: 'Install Terraform'
+    inputs:
+      terraformVersion: '0.12.20'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build Function App'
+    inputs:
+      command: 'build'
+      projects: '$(Build.SourcesDirectory)/src/**/*.csproj'
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+
+  - task: CopyFiles@2
+    displayName: Copy Azure TF backend file to primary TF dir
+    inputs:
+      SourceFolder: 'infrastructure/terraform_backend'
+      Contents: '**'
+      TargetFolder: 'infrastructure/terraform'
+      OverWrite: true
+
+  - task: TerraformTaskV1@0
+    displayName: 'tf init'
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform'
+      backendServiceArm: 'azure_dce_nonprod'
+      backendAzureRmResourceGroupName: '$(PREFIX)-sample-rg'
+      backendAzureRmStorageAccountName: '$(PREFIX)tfstor'
+      backendAzureRmContainerName: 'tfstate'
+      backendAzureRmKey: 'terraform.tfstate'
+
+  - task: TerraformTaskV1@0
+    displayName: 'TF 🍔 "top bun" (tf apply -target module.functions -var "prefix=$(PREFIX)" -var "location=$(LOCATION)")'
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      commandOptions: '-target module.functions -var "prefix=$(PREFIX)" -var "location=$(LOCATION)"'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform'
+      environmentServiceNameAzureRM: 'azure_dce_nonprod'
+
+  - task: AzureFunctionApp@1
+    displayName: '🥓 Deploy Function App'
+    inputs:
+      azureSubscription: 'azure_dce_nonprod'
+      appType: 'functionApp'
+      appName: '$(PREFIX)-fxn'
+      package: '$(Build.ArtifactStagingDirectory)'
+      deploymentMethod: 'auto'
+
+  - task: TerraformTaskV1@0
+    displayName: 'TF 🍔 "bottom bun" (tf apply -var "prefix=$(PREFIX)" -var "location=$(LOCATION)")'
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      commandOptions: '-var "prefix=$(PREFIX)" -var "location=$(LOCATION)"'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform'
+      environmentServiceNameAzureRM: 'azure_dce_nonprod'
