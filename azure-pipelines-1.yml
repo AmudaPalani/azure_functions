@@ -5,9 +5,9 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  LOCATION: westus
+  LOCATION: eastus
   # Uncomment & change this to something more unique before running
-  # PREFIX: azuresample
+  PREFIX: dcetest
 
 jobs:
 - job: SetupAzureTFBackend
