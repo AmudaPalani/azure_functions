@@ -4,13 +4,13 @@ pr:
 - master
     
 pool:
-    vmImage: "Ubuntu 16.04"
+    vmImage: 'ubuntu-latest'
 
 steps:
 
 - task: TerraformInstaller@0
   inputs:
-    terraformVersion: '0.12.18'
+    terraformVersion: '0.12.20'
   condition: always()
   displayName: 'Install terraform'
 
