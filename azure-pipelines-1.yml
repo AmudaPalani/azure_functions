@@ -7,7 +7,7 @@ pool:
 variables:
   LOCATION: eastus
   # Uncomment & change this to something more unique before running
-  PREFIX: dcetest
+  PREFIX: Palani
 
 jobs:
 - job: SetupAzureTFBackend
@@ -20,14 +20,14 @@ jobs:
       azureSubscription: 'azure_dce_nonprod'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
-      inlineScript: 'az group create --name  $(PREFIX)-sample-rg --location $(LOCATION) --tags sample=azure-functions-event-grid-terraform'
+      inlineScript: 'az group create --name  $(PREFIX)-sample-rg --location $(LOCATION) --tags application=dce'
   - task: AzureCLI@2
     displayName: Create tfstate storage account
     inputs:
       azureSubscription: 'azure_dce_nonprod'
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
-      inlineScript: 'az storage account create --resource-group  $(PREFIX)-sample-rg --name $(PREFIX)tfstor --kind StorageV2 --tags sample=azure-functions-event-grid-terraform'
+      inlineScript: 'az storage account create --resource-group  $(PREFIX)-sample-rg --name $(PREFIX)tfstor --kind StorageV2 --tags application=dce'
 
   - task: AzureCLI@2
     displayName: Create tfstate container
