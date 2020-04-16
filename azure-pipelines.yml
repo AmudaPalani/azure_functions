@@ -19,6 +19,7 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform'
     backendServiceArm: 'azure_dce_nonprod'
     backendAzureRmResourceGroupName: 'apalan11apalan11-01'
     backendAzureRmStorageAccountName: 'dcetest'
@@ -30,7 +31,7 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'validate'
-    workingDirectory: './infrastructure/terraform'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infrastructure/terraform'
     environmentServiceNameAzureRM: 'azure_dce_nonprod'
     backendAzureRmResourceGroupName: 'apalan11apalan11-01'
     backendAzureRmStorageAccountName: 'dcetest'
